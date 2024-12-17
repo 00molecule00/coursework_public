@@ -1,0 +1,125 @@
+<!-- Add this to your manage_employees.html template -->
+{% extends "private_base.html" %}
+{% block title %}Manage Employees{% endblock %}
+{% block content %}
+
+<div class = "container">
+    <h3> </h3>
+    <h2>Информация о сторудниках</h2>
+    <div class="container">
+        <form method="post">
+            <input class="search_field" type="text" name="search_query" placeholder="Search by name or department" value="{{ search_query }}">
+            <button class = "button-74-small" type="submit">Search</button>
+        </form>
+    </div>
+
+<div class="container-table">
+    
+
+    <table class="table" style = "width: 1200px;"id="employeeTable">
+        <thead>
+            <tr>
+                <th class = "table-head" onclick="sortTable(0, 'numeric')" style="width: 100px;">ID &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(1, 'text')" style="width: 100px;">Имя &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(2, 'text')" style="width: 160px;">Фамилия &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(3, 'text')" style="width: 150px;">Отдел &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(3, 'text')" style="width: 120px;">Должность &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(4, 'numeric')" style="width: 100px;">Оклад &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(6, 'text')" style="width: 130px;">Дата заключения договора &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(7, 'text')" style="width: 150px;">Дата окончания договора &#x25BC;</th>
+                <th class = "table-head" onclick="sortTable(5, 'text')" style="width: 150px;">Адресс &#x25BC;</th>        
+                <th class = "table-head">Редактировать</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+                <tr>
+                    <td class = "table-head" style="width: 100px;">{{ employee[0] }}</td>
+                    <td class = "table-head" style="width: 100px;">{{ employee[1] }}</td>
+                    <td class = "table-head" style="width: 150px;">{{ employee[2] }}</td>
+                    <td class = "table-head" style="width: 150px;">{{ employee[3] }}</td>
+                    <td class = "table-head" style="width: 100px;">{{ employee[8] }}</td>
+                    <td class = "table-head" style="width: 100px;">{{ employee[4] }}</td>                    
+                    <td class = "table-head" style="width: 130px;">{{ employee[6] }}</td>
+                    <td class = "table-head" style="width: 150px;">{{ employee[7] }}</td>
+                    <td class = "table-head" style="width: 150px;">{{ employee[5] }}</td>                    
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="employee_id" value="{{ employee[0] }}">
+                            <input type="hidden" name="name" value="{{ employee[1] }}">
+                            <input type="hidden" name="surname" value="{{ employee[2] }}">
+                            <input type="hidden" name="department" value="{{ employee[3] }}">
+                            <input type="hidden" name="salary" value="{{ employee[4] }}">
+                            <input type="hidden" name="position" value="{{ employee[8] }}">
+                            <input type="hidden" name="address" value="{{ employee[5] }}">
+                            <input type="hidden" name="hire_date" value="{{ employee[6] }}">
+                            <input type="hidden" name="termination_date" value="{{ employee[7] }}">
+                            <button><a href="{{ url_for('employee_page', employee_id=employee[0]) }}">Изменить</a>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+<script>
+    function sortTable(column, dataType) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("employeeTable");
+        switching = true;
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < rows.length - 1; i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[column];
+                y = rows[i + 1].getElementsByTagName("td")[column];
+
+                if (dataType === 'numeric') {
+                    if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dataType === 'text') {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("employeeTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            // Change the index according to the column you want to search
+            td = tr[i].getElementsByTagName("td")[1]; // Assuming you want to search the second column (Имя)
+            
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+{% endblock %}

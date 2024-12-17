@@ -1,0 +1,13 @@
+{% extends "private_base.html" %}
+{% block title %}Manage Employees{% endblock %}
+{% block content %}
+<div class="container">
+    <div>
+        <h2>Distribution of Majors</h2>
+        <img src="data:image/png;base64,{{ majors_chart }}" alt="Majors Pie Chart">
+    
+        <h2>Distribution of Degrees</h2>
+        <img src="data:image/png;base64,{{ degrees_chart }}" alt="Degrees Pie Chart">
+    </div>
+
+{% endblock %}

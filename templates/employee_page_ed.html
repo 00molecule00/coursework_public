@@ -1,0 +1,45 @@
+{% extends "private_base.html" %}
+{% block title %}Employee Page{% endblock %}
+{% block content %}
+<div class="container">
+    <h3></h3>
+    <h2>Employee Information</h2>
+    <form method="post">
+        <!-- Display current employee information -->
+        <label for="name">Имя:</label>
+        <input type="text" name="name" value="{{ employee_info[1] }}" required><br>
+
+        <label for="surname">Фамилия:</label>
+        <input type="text" name="surname" value="{{ employee_info[2] }}" required><br>
+
+        <label for="uni">Университет:</label>
+        <input type="text" name="uni" value="{{ employee_info[9] }}" required><br>
+
+        <label for="degree">Степень:</label>
+        <input type="text" name="degree" value="{{ employee_info[10] }}" required><br>
+
+        <label for="major">Специальность:</label>
+        <input type="text" name="major" value="{{ employee_info[11] }}" required><br>
+
+        <label for="grad_date">Дата окончания университета:</label>
+        <input type="text" name="grad_date" value="{{ employee_info[12] }}" required><br>
+
+        <!-- Add other fields as needed -->
+
+        <!-- Add a submit button to update the information -->
+        <h3> </h3>
+        <button type="submit">Обновить Информацию о сотруднике</button>
+        |
+        <button><a href="{{ url_for('manage_employees_education') }}">Назад</a></button>
+    </form>
+
+    <!-- Download Buttons -->
+    <p>
+        
+        
+        <!-- <a href="{{ url_for('download_employee_info', employee_id=employee_info[0], file_format='xlsx') }}">Download Excel</a>
+        |
+        <a href="{{ url_for('download_employee_info', employee_id=employee_info[0], file_format='csv') }}">Download CSV</a> -->
+    </p>
+</div>
+{% endblock %}

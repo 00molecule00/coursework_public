@@ -1,0 +1,110 @@
+{% extends "private_base.html" %}
+{% block title %}HR Home{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Welcome Message -->
+            <div class="alert alert-info alert-dismissible fade show" role="alert" id="welcome-message">
+                <strong>Welcome, {{ user_info['first_name'] }}!</strong> This is your personal space.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hideWelcome()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- User's Personal Information -->
+            <h3></h3>
+            <h3>Информация о вас</h3>
+            <!-- Display Photo -->
+            <p>Email: {{ user_info['email'] }}</p>
+            <p>Роль: {{ user_info['role'] }}</p>
+            <p>Имя: {{ employee_info['Name'] }}</p>
+            <p>Фамилия: {{ employee_info['Surname'] }}</p>
+            <p>Адресс: {{ employee_info['Adress'] }}</p>
+            <p>Отдел: {{ employee_info['Department'] }}</p>
+            <p>Должность: {{ employee_info['position'] }}</p>
+            <p>Дата заключения договора: {{ employee_info['hire_date'] }}</p>
+            <p>Дата окончания договора: {{ employee_info['termination_date'] }}</p>
+            <p>Оклад: {{ employee_info['salary'] }} у.е.</p>
+                        
+        </div>
+
+        <!-- Move the links to the right side -->
+        <div class="col-md-6">
+            <div class="text-left">
+
+                <h2></h2>
+            <button class="button-74 " type="button" data-toggle="collapse" data-target="#request_list" aria-expanded="false" aria-controls="request_list">
+            <h3>Cотрудник</h3>
+            </button>
+            <div class="collapse" id = "request_list">
+                <ul class="list-group list-group-flush" id ="request_list"></ul>
+            <h3>Запрос об отгуле</h3>
+            <form method="POST" action="{{ url_for('submit_leave_request') }}">
+                <div class="form-group">
+                    <label for="start_date">C:</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_date">По:</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                </div>
+                <button type="submit" class="button-74-small">Подтвердить</button>
+            </form>
+
+            <h2></h2>
+            
+                    <h3>Ваши запросы на отгул</h3>
+                    <table>
+                        <thead>
+                        <tr>
+                        <th style="width: 100px;">Начало</th>
+                        <th style="width: 100px;">Окончание</th>
+                        <th style="width: 100px;">Статус</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for leave_request in leave_requests %}
+                        <tr>
+                            <td style="width: 100px;">{{ leave_request[2] }}</td>
+                            <td style="width: 100px;">{{ leave_request[3] }}</td>
+                            <td style="width: 100px;">{{ leave_request[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </ul>    
+            </div>
+
+                <h3></h3>
+                <button class="button-74" type="button" data-toggle="collapse" data-target="#managment_list" aria-expanded="false" aria-controls="managment_list">
+                    <h3>Менеджмент</h3>
+                </button>
+                <div class="collapse" id = "managment_list">
+                    <ul class = "list-group list-group-flush" id = "managment_list">
+                <p><h3><a class="sorting" href="{{ url_for('manage_leave_requests') }}">Запросы на отсутствие</a></h3></p>
+                <p><h3><a class="sorting" href="{{ url_for('manage_employees') }}">Информация о сотрудниках</a></h3></p>
+                <p><h3><a class="sorting" href="{{ url_for('manage_employees_education') }}">Информация об образовании сотрудников</a></h3></p>
+                <p><h3><a class="sorting" href="{{ url_for('pie_charts') }}">Аналитика</a></h3></p>
+                <p><h3><a class="sorting" href="{{ url_for('projects') }}">Проекты</a></h3></p>
+            </ul>
+            </div>
+            
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Check if the welcome message should be hidden
+    if (localStorage.getItem('welcome_shown')) {
+        document.getElementById('welcome-message').style.display = 'none';
+    }
+
+    function hideWelcome() {
+        // Set a flag in local storage to indicate that the welcome message has been shown
+        localStorage.setItem('welcome_shown', 'true');
+    }
+</script>
+{% endblock %}

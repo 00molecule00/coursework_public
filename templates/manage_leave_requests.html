@@ -1,0 +1,24 @@
+{% extends "private_base.html" %}
+{% block title %}HR Home{% endblock %}
+{% block content %}
+
+<h2>Запросы на отсутствие</h2>
+<a class = "sorting" href="{{ url_for('manage_leave_requests', sort_by='start_date') }}">Сортировать по дате начала</a>
+|
+<a class = "sorting" href="{{ url_for('manage_leave_requests', sort_by='end_date') }}">Сортировать по дате окончания</a>
+|
+<a class = "sorting" href="{{ url_for('manage_leave_requests', sort_by='status') }}">Сортировать по статусу заявки</a>
+
+{% for request in leave_requests %}
+    <div class="leave-request">
+        <p>{{ request[1] }} {{ request[2] }} - {{ request[3] }} to {{ request[4] }}</p>
+        <p>Status: {{ request[5] }}</p>
+        <form method="post">
+            <input class = "request-text"type="hidden" name="request_id" value="{{ request[0] }}">
+            <button class="button-74-small" type="submit" name="action" value="accept">Одобрить</button>
+            <button class="button-74-small" type="submit" name="action" value="decline">Отклонить</button>   
+        </form>
+        <h2></h2>
+    </div>
+{% endfor %}
+{% endblock %}

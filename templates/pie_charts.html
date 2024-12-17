@@ -1,0 +1,11 @@
+{% extends "private_base.html" %}
+{% block title %}Education Pie-charts{% endblock %}
+{% block content %}
+<div>
+    <h2>Распределение по специальностям</h2>
+    <img src="data:image/png;base64,{{ majors_chart }}" alt="Majors Pie Chart">
+
+    <h2>Распределение по степеням</h2>
+    <img src="data:image/png;base64,{{ degrees_chart }}" alt="Degrees Pie Chart">
+</div>
+{% endblock %}

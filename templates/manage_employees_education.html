@@ -1,0 +1,121 @@
+<!-- Add this to your manage_employees.html template -->
+{% extends "private_base.html" %}
+{% block title %}Manage Employees Education{% endblock %}
+{% block content %}
+<div class="container">
+    <h3> </h3>
+    <h2>Информация о образовании сотрудников</h2>
+    <div class="container">
+        <form method="post">
+            <input type="text" name="search_query" placeholder="Search by name or department" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <table class="table" id="employeeEdTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0, 'numeric')" style="width: 80px; cursor: pointer;">ID &#x25BC;</th>
+                <th onclick="sortTable(1, 'text')" style="width: 100px; cursor: pointer;">Имя &#x25BC;</th>
+                <th onclick="sortTable(2, 'text')" style="width: 150px; cursor: pointer;">Фамилия &#x25BC;</th>
+                <th onclick="sortTable(3, 'text')" style="width: 150px; cursor: pointer;">Университет &#x25BC;</th>
+                <th onclick="sortTable(4, 'text')" style="width: 120px; cursor: pointer;">Степень &#x25BC;</th>
+                <th onclick="sortTable(5, 'text')" style="width: 170px; cursor: pointer;">Специальность &#x25BC;</th>
+                <th onclick="sortTable(6, 'date')" style="width: 150px; cursor: pointer;">Дата окончания университета &#x25BC;</th>
+                <th>Редактировать</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+                <tr>
+                    <td style="width: 80px;">{{ employee[0] }}</td>
+                    <td style="width: 100px;">{{ employee[1] }}</td>
+                    <td style="width: 150px;">{{ employee[2] }}</td>
+                    <td style="width: 150px;">{{ employee[9] }}</td>
+                    <td style="width: 100px;">{{ employee[10] }}</td>
+                    <td style="width: 170px;">{{ employee[11] }}</td>
+                    <td style="width: 150px;">{{ employee[12] }}</td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="employee_id" value="{{ employee[0] }}">
+                            <input type="hidden" name="name" value="{{ employee[1] }}">
+                            <input type="hidden" name="surname" value="{{ employee[2] }}">
+                            <input type="hidden" name="uni" value="{{ employee[9] }}">
+                            <input type="hidden" name="degree" value="{{ employee[10] }}">
+                            <input type="hidden" name="major" value="{{ employee[11] }}">
+                            <input type="hidden" name="grad_date" value="{{ employee[12] }}">                            
+                            <button><a href="{{ url_for('employee_page_ed', employee_id=employee[0]) }}">Изменить</a></button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function sortTable(column, dataType) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("employeeEdTable");
+        switching = true;
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < rows.length - 1; i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[column];
+                y = rows[i + 1].getElementsByTagName("td")[column];
+
+                if (dataType === 'numeric') {
+                    if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dataType === 'text') {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dataType === 'date') {
+                    var dateX = new Date(x.innerHTML);
+                    var dateY = new Date(y.innerHTML);
+
+                    if (dateX > dateY) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("employeeEdTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            // Change the index according to the column you want to search
+            td = tr[i].getElementsByTagName("td")[1]; // Assuming you want to search the second column (Имя)
+
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}
